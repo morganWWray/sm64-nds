@@ -8,13 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
-      - name: Install devkitARM Toolchain
+      - name: Install Dependencies & devkitARM
         run: |
-          sudo apt-get update && sudo apt-get install -y wget python3 make git
+          sudo apt-get update
+          sudo apt-get install -y wget python3 make git gnupg ca-certificates
           wget https://apt.devkitpro.org/devkitpro-keyring.deb
-          sudo dpkg -i devkitpro-keyring.deb
+          sudo dpkg -i devkitpro-keyring.deb || sudo apt-get install -f -y
           echo "deb [signed-by=/usr/share/keyrings/devkitpro-keyring.gpg] https://apt.devkitpro.org stable main" | sudo tee /etc/apt/sources.list.d/devkitpro.list
           sudo apt-get update
           sudo apt-get install -y devkitARM nds-dev
@@ -27,7 +28,7 @@ jobs:
           make TARGET_NDS=1 VERSION=us -j$(nproc)
 
       - name: Upload NDS File
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.2.4
         with:
           name: sm64-nds-build
           path: build/us_nds/*.nds
