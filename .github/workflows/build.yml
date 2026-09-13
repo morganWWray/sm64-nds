@@ -10,15 +10,20 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up devkitPro
-        uses: devkitPro/setup-devkitpro@v1
-        with:
-          wheels: nds-dev
+      - name: Install devkitARM Toolchain
+        run: |
+          sudo apt-get update && sudo apt-get install -y wget python3 make git
+          wget https://apt.devkitpro.org/devkitpro-keyring.deb
+          sudo dpkg -i devkitpro-keyring.deb
+          echo "deb [signed-by=/usr/share/keyrings/devkitpro-keyring.gpg] https://apt.devkitpro.org stable main" | sudo tee /etc/apt/sources.list.d/devkitpro.list
+          sudo apt-get update
+          sudo apt-get install -y devkitARM nds-dev
 
       - name: Compile SM64 NDS
         run: |
           export DEVKITPRO=/opt/devkitpro
           export DEVKITARM=/opt/devkitpro/devkitARM
+          export PATH=$DEVKITARM/bin:$DEVKITPRO/tools/bin:$PATH
           make TARGET_NDS=1 VERSION=us -j$(nproc)
 
       - name: Upload NDS File
