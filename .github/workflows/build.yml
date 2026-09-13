@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v4
 
       - name: Install Dependencies & devkitARM
         run: |
@@ -28,7 +28,7 @@ jobs:
           make TARGET_NDS=1 VERSION=us -j$(nproc)
 
       - name: Upload NDS File
-        uses: actions/upload-artifact@v4.2.4
+        uses: actions/upload-artifact@v4
         with:
           name: sm64-nds-build
           path: build/us_nds/*.nds
