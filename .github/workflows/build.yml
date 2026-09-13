@@ -1,16 +1,16 @@
 name: Build NDS Port
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set Up devkitPro
+      - name: Set up devkitPro
         uses: devkitPro/setup-devkitpro@v1
         with:
           wheels: nds-dev
@@ -22,8 +22,7 @@ jobs:
           make TARGET_NDS=1 VERSION=us -j$(nproc)
 
       - name: Upload NDS File
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: sm64-nds-build
           path: build/us_nds/*.nds
-          
